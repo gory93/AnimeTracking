@@ -40,6 +40,9 @@ export const exchangeCodeForToken = async (code: string): Promise<AuthData> => {
     ? 'http://localhost:3001/api/token'  // Development
     : 'https://anime-tracking-9f2vcjmlu-gory93s-projects.vercel.app/api/token';  // Production
   
+  console.log('🚀 Using proxy URL:', proxyUrl);
+  console.log('🔧 __DEV__ mode:', __DEV__);
+  
   const response = await fetch(proxyUrl, {
     method: 'POST',
     headers: {

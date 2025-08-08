@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');
+// Using native fetch (Node.js 18+)
 
 const app = express();
 const port = 3001;
@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Your AniList client secret - KEEP THIS SECURE!
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET_HERE'; // Replace with your actual client secret
+const CLIENT_SECRET = '5iG558YU4aTAN7HQHcm0q7Xky29MKFfXM8jONh3m'; // Replace with your actual client secret
 
 app.post('/api/token', async (req, res) => {
   try {

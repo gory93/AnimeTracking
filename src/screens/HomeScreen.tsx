@@ -29,7 +29,14 @@ const HomeScreen: React.FC = () => {
     try {
       if (user) {
         const list = await getUserAnimeList(user.id);
-        setAnimeList(list);
+        // Filter out any items with missing required data
+        const validList = list.filter(item => 
+          item && 
+          item.media && 
+          item.media.title && 
+          (item.media.title.english || item.media.title.romaji)
+        );
+        setAnimeList(validList);
       }
     } catch (error) {
       console.error('Error loading anime list:', error);
@@ -75,6 +82,8 @@ const HomeScreen: React.FC = () => {
         return '#FC8181';
       case 'PLANNING':
         return '#A78BFA';
+      case 'UNKNOWN':
+        return '#8BA0B2';
       default:
         return '#8BA0B2';
     }
@@ -92,8 +101,10 @@ const HomeScreen: React.FC = () => {
         return 'Dropped';
       case 'PLANNING':
         return 'Planning';
+      case 'UNKNOWN':
+        return 'Unknown';
       default:
-        return status;
+        return status || 'Unknown';
     }
   };
 
@@ -106,18 +117,18 @@ const HomeScreen: React.FC = () => {
       />
       <View style={styles.animeInfo}>
         <Text style={styles.animeTitle} numberOfLines={2}>
-          {item.media.title.english || item.media.title.romaji}
+          {String(item.media.title?.english || item.media.title?.romaji || 'Unknown Title')}
         </Text>
         <View style={styles.statusContainer}>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-            <Text style={styles.statusText}>{formatStatus(item.status)}</Text>
+            <Text style={styles.statusText}>{String(formatStatus(item.status || 'UNKNOWN'))}</Text>
           </View>
         </View>
         <Text style={styles.progressText}>
-          Progress: {item.progress}/{item.media.episodes || '?'}
+          Progress: {String(item.progress || 0)}/{String(item.media.episodes || '?')}
         </Text>
-        {item.score && (
-          <Text style={styles.scoreText}>Score: {item.score}/10</Text>
+        {item.score && item.score > 0 && (
+          <Text style={styles.scoreText}>Score: {String(item.score)}/10</Text>
         )}
       </View>
     </View>
@@ -136,7 +147,7 @@ const HomeScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hello, {user?.name}!</Text>
+          <Text style={styles.greeting}>Hello, {String(user?.name || 'User')}!</Text>
           <Text style={styles.subtitle}>Your Anime Collection</Text>
         </View>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -155,7 +166,7 @@ const HomeScreen: React.FC = () => {
         <FlatList
           data={animeList}
           renderItem={renderAnimeItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => (item.id || Math.random()).toString()}
           contentContainerStyle={styles.listContainer}
           refreshControl={
             <RefreshControl
