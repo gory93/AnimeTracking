@@ -1,7 +1,7 @@
 // Vercel serverless function for AniList OAuth
 // Deploy this to Vercel for free production use
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   // Enable CORS for your mobile app
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
