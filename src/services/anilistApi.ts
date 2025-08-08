@@ -38,7 +38,7 @@ export const exchangeCodeForToken = async (code: string): Promise<AuthData> => {
   // Use proxy server - localhost for development, Vercel for production
   const proxyUrl = __DEV__ 
     ? 'http://localhost:3001/api/token'  // Development
-    : 'https://your-project-name.vercel.app/api/token';  // Production (replace with your Vercel URL)
+    : 'https://anime-tracking-9f2vcjmlu-gory93s-projects.vercel.app/api/token';  // Production
   
   const response = await fetch(proxyUrl, {
     method: 'POST',
